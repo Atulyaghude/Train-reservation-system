@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Railway Reservation Desk</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">R</div><div><strong>RailDesk</strong><small>RESERVATION SYSTEM</small></div></div>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Overview</button>
+      <button class="nav-item" data-page="trains"><span>🚆</span> Trains</button>
+      <button class="nav-item" data-page="book"><span>＋</span> Book a ticket</button>
+      <button class="nav-item" data-page="passengers"><span>♙</span> Passengers</button>
+      <button class="nav-item" data-page="waiting"><span>◷</span> Waiting list</button>
+      <button class="nav-item" data-page="search"><span>⌕</span> Find a PNR</button>
+      <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>Local demo</strong><small>Browser-based prototype</small></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><div class="eyebrow">RAILWAY OPERATIONS</div><h1 id="page-title">Overview</h1></div><div class="top-actions"><span class="today" id="today"></span><div class="avatar">RD</div></div></header>
+      <section id="page-dashboard" class="page active">
+        <div class="welcome"><div><p class="eyebrow light">YOUR JOURNEY, ORGANIZED</p><h2>Train reservations,<br/>made simple.</h2><p>Manage trains, confirm seats, and keep your waiting list moving.</p><button class="btn btn-white" data-goto="book">＋ Book a ticket</button></div><div class="hero-art"><div class="sun"></div><div class="track"></div><div class="train-emoji">🚆</div><div class="hero-note"><strong>Smart queue handling</strong><span>Next passenger promotes automatically</span></div></div></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon purple">🚆</div><span>Registered trains</span><strong id="stat-trains">0</strong><small>Across your network</small></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><span>Confirmed seats</span><strong id="stat-confirmed">0</strong><small>Active reservations</small></article>
+          <article class="stat-card"><div class="stat-icon orange">◷</div><span>Waiting passengers</span><strong id="stat-waiting">0</strong><small>Queued by booking order</small></article>
+          <article class="stat-card"><div class="stat-icon blue">▤</div><span>Seats available</span><strong id="stat-available">0</strong><small>Ready to reserve</small></article>
+        </div>
+        <div class="section-head"><div><h3>Quick actions</h3><p>Jump straight into a common task.</p></div></div>
+        <div class="quick-grid">
+          <button class="quick-card" data-goto="trains"><span class="quick-icon">＋</span><strong>Add or view trains</strong><small>Manage routes and seat capacity</small><span class="arrow">↗</span></button>
+          <button class="quick-card" data-goto="book"><span class="quick-icon">🎫</span><strong>Book a ticket</strong><small>Reserve a seat or join the queue</small><span class="arrow">↗</span></button>
+          <button class="quick-card" data-goto="search"><span class="quick-icon">⌕</span><strong>Track a PNR</strong><small>Check confirmed or waiting status</small><span class="arrow">↗</span></button>
+        </div>
+        <div class="section-head"><div><h3>Recent reservations</h3><p>Your latest bookings across all trains.</p></div><button class="text-btn" data-goto="passengers">View passengers →</button></div>
+        <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>PNR</th><th>Passenger</th><th>Train</th><th>Seat</th><th>Status</th></tr></thead><tbody id="recent-body"></tbody></table></div><div class="empty" id="recent-empty">No bookings yet. Add a train, then make your first reservation.</div></div>
+      </section>
+      <section id="page-trains" class="page">
+        <div class="page-intro"><div><h2>Train directory</h2><p>Create train routes and monitor available capacity.</p></div><button class="btn btn-primary" id="open-train-form">＋ Add train</button></div>
+        <div class="panel form-panel hidden" id="train-form-panel"><div class="panel-heading"><div><h3>Add a train</h3><p>Enter route details and total seat capacity.</p></div><button class="icon-btn" id="close-train-form">×</button></div><form id="train-form" class="form-grid"><label>Train number<input name="trainNo" type="number" min="1" required placeholder="e.g. 12951"/></label><label>Train name<input name="name" required maxlength="49" placeholder="e.g. Mumbai Rajdhani"/></label><label>Source station<input name="source" required maxlength="29" placeholder="Departure station"/></label><label>Destination station<input name="destination" required maxlength="29" placeholder="Arrival station"/></label><label>Total seats<input name="seats" type="number" min="1" max="100" required placeholder="1–100"/></label><div class="form-actions"><button class="btn btn-primary">Save train</button><button class="btn btn-quiet" type="reset">Clear</button></div></form></div>
+        <div class="filter-row"><div class="searchbox">⌕ <input id="train-filter" placeholder="Search by train, number, or station"/></div><span id="train-count" class="muted"></span></div>
+        <div id="train-cards" class="train-grid"></div><div id="trains-empty" class="empty panel">No trains added yet. Select “Add train” to get started.</div>
+      </section>
+      <section id="page-book" class="page">
+        <div class="page-intro"><div><h2>Book a ticket</h2><p>Reserve an available seat or add a passenger to the waiting list.</p></div></div>
+        <div class="booking-layout"><div class="panel form-panel"><div class="panel-heading"><div><h3>Passenger details</h3><p>All fields are required to create a booking.</p></div><div class="form-symbol">🎫</div></div><form id="booking-form" class="form-grid single"><label>Select train<select name="trainNo" id="booking-train" required><option value="">Choose a train</option></select></label><div class="route-preview" id="route-preview"><span>Choose a train to view its route</span></div><label>Passenger name<input name="name" required maxlength="49" placeholder="Full name"/></label><div class="two-col"><label>Age<input name="age" type="number" min="1" max="120" required placeholder="Age"/></label><label>Gender<select name="gender" required><option value="">Select</option><option value="M">Male</option><option value="F">Female</option><option value="O">Other</option></select></label></div><button class="btn btn-primary full-btn">Confirm booking</button><p class="fine-print">PNR is generated automatically. If all seats are occupied, the passenger joins the queue.</p></form></div><div class="panel info-panel"><div class="info-illustration">🚉</div><h3>How booking works</h3><div class="step"><span>1</span><div><strong>Choose your train</strong><p>Review route and seat availability.</p></div></div><div class="step"><span>2</span><div><strong>Enter passenger details</strong><p>A unique PNR is generated for each booking.</p></div></div><div class="step"><span>3</span><div><strong>Automatic confirmation</strong><p>Waiting passengers move into freed seats in order.</p></div></div><div class="mini-capacity"><div><span>Selected train capacity</span><strong id="capacity-text">—</strong></div><div class="progress"><span id="capacity-bar"></span></div></div></div></div>
+      </section>
+      <section id="page-passengers" class="page">
+        <div class="page-intro"><div><h2>Confirmed passengers</h2><p>Review seat assignments and cancel reservations when needed.</p></div></div>
+        <div class="filter-row"><div class="searchbox">⌕ <input id="passenger-filter" placeholder="Search name, PNR, or train"/></div><span class="muted" id="passenger-count"></span></div>
+        <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>PNR</th><th>Passenger</th><th>Train & route</th><th>Seat</th><th>Age / Gender</th><th>Action</th></tr></thead><tbody id="passenger-body"></tbody></table></div><div class="empty" id="passengers-empty">No confirmed passengers yet.</div></div>
+      </section>
+      <section id="page-waiting" class="page">
+        <div class="page-intro"><div><h2>Waiting list</h2><p>Passengers are ordered by booking time and promoted when a seat opens.</p></div><span class="pill pill-wait">FIFO QUEUE</span></div>
+        <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Position</th><th>PNR</th><th>Passenger</th><th>Train</th><th>Age / Gender</th><th>Action</th></tr></thead><tbody id="waiting-body"></tbody></table></div><div class="empty" id="waiting-empty">The waiting list is clear.</div></div>
+      </section>
+      <section id="page-search" class="page">
+        <div class="page-intro"><div><h2>Find a booking</h2><p>Use the PNR printed on the booking confirmation.</p></div></div>
+        <div class="panel lookup-panel"><div class="lookup-icon">⌕</div><form id="search-form"><label>Passenger Number Record (PNR)<div class="lookup-input"><input id="pnr-input" type="number" min="1" required placeholder="Enter PNR, e.g. 5001"/><button class="btn btn-primary">Search PNR →</button></div></label></form><div id="search-result"></div></div>
+        <div class="hint-grid"><div><strong>Confirmed</strong><p>Passenger has a seat assignment.</p></div><div><strong>Waiting</strong><p>Passenger is queued for the next available seat.</p></div><div><strong>Not found</strong><p>Double-check the PNR and try again.</p></div></div>
+      </section>
+      <footer>RailDesk <span>•</span> Train Reservation System <span class="footer-right">Built around linked lists & FIFO queues</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal-backdrop hidden" id="cancel-modal"><div class="modal"><div class="modal-icon">!</div><h3>Cancel this ticket?</h3><p id="cancel-copy">This action cannot be undone.</p><div class="modal-actions"><button class="btn btn-quiet" id="cancel-no">Keep ticket</button><button class="btn btn-danger" id="cancel-yes">Cancel ticket</button></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
